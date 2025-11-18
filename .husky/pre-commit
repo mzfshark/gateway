@@ -1,1 +1,12 @@
-pnpm lint-staged
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run lint-staged in a portable way across Windows/WSL
+if command -v pnpm >/dev/null 2>&1; then
+	pnpm exec lint-staged
+elif command -v npx >/dev/null 2>&1; then
+	npx --no-install lint-staged
+else
+	echo "lint-staged: pnpm/npx not found; skipping pre-commit checks" >&2
+	exit 0
+fi
